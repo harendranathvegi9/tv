@@ -1,12 +1,11 @@
 var db = require('./db/db.js')
 var CJ = require('cron').CronJob
 
-var spawn = require('child_process').spawn,
+var spawn = require('child_process').spawn
 
 new CJ('0 */20 * * * *', function(){
   console.log('You will see this message every 20 minute');
-  var py    = spawn('python', ['./trending-value/trendingvalue.py']);
-
+  var py    = spawn('python', ['../tv-import/trendingvalue.py']);
 
   py.stdout.on('data', function (data) {
     console.log('stdout: ' + data);
