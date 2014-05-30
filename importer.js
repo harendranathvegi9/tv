@@ -1,6 +1,6 @@
 var db = require('./db/db.js')
 var CJ = require('cron').CronJob
-var argv = require('yargs')
+var argv = require('yargs').argv
 
 console.log(argv)
 var dev = argv.dev ? true : false
@@ -13,6 +13,7 @@ new CJ('0 */20 * * * *', function(){
   if(argv.dev) args.push('--dev')
   if(argv.output) args.push('--output Z'+argv.output)
 
+  console.log('calling python with args:', args)
   var py    = spawn('python', args);
 
   py.stdout.on('data', function (data) {
