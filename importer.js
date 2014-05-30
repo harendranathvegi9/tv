@@ -2,13 +2,25 @@ var db = require('./db/db.js')
 var CJ = require('cron').CronJob
 var argv = require('yargs').argv
 
-console.log(argv)
-var dev = argv.dev ? true : false
-
 var spawn = require('child_process').spawn
 
-new CJ('0 */20 * * * *', function(){
-  console.log('You will see this message every 20 minute');
+var interval = argv.interval || 'day'
+var immediate = argv.immediate || false
+
+var cront = '0 0 0 * * *'
+if(interval == 'hour'){
+  cront = '0 0 * * * *'
+}
+if(interval == 'minute'){
+  cront = '0 * * * * *'
+}
+
+new CJ(cront, runPy, null, true);
+
+if(immediate) runPy()
+
+function runPy(){
+  console.log('Running', cront);
   var args = ['../tv-import/trendingvalue.py']
   if(argv.dev) args.push('--dev')
   if(argv.output) args.push('--output Z'+argv.output)
@@ -27,4 +39,4 @@ new CJ('0 */20 * * * *', function(){
   py.on('close', function (code) {
     console.log('child process exited with code ' + code);
   });
-}, null, true);
+}
