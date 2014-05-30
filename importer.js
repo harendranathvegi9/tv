@@ -23,7 +23,7 @@ function runPy(){
   console.log('Running', cront);
   var args = ['../tv-import/trendingvalue.py']
   if(argv.dev) args.push('--dev')
-  if(argv.output) args.push('--output Z'+argv.output)
+  if(argv.output) args.push('--output='+argv.output)
 
   console.log('calling python with args:', args)
   var py    = spawn('python', args);
