@@ -1,0 +1,26 @@
+{
+  "name": "tv",
+  "version": "0.0.0",
+  "description": "",
+  "main": "t.js",
+  "dependencies": {
+    "cron": "^1.0.4",
+    "hapi": "^5.1.0",
+    "level": "^0.18.0",
+    "yargs": "^1.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rt2zz/tv"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rt2zz/tv/issues"
+  },
+  "homepage": "https://github.com/rt2zz/tv"
+}

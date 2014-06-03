@@ -1,7 +1,8 @@
 var Hapi = require('hapi');
 
+console.log('starting')
 // Create a server with a host and port
-var server = Hapi.createServer('localhost', 8000);
+var server = Hapi.createServer('localhost', 8002);
 
 // Add the route
 server.route({
@@ -22,9 +23,11 @@ server.route({
     }
 });
 
+console.log('actual start')
 // Start the server
 server.start();
 
 function serveDir(request, reply) {
-  reply('Hello')
+	console.log('serve')  
+	reply('Hello')
 }
