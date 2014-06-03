@@ -1,7 +1,7 @@
-var db = require('./db/db.js')
 var CJ = require('cron').CronJob
 var argv = require('yargs').argv
 
+var tvToDB = require('tvtodb.js')
 var spawn = require('child_process').spawn
 
 var interval = argv.interval || 'day'
@@ -23,7 +23,6 @@ function runPy(){
   console.log('Running', cront);
   var args = ['../tv-import/trendingvalue.py']
   if(argv.dev) args.push('--dev')
-  if(argv.output) args.push('--output='+argv.output)
 
   console.log('calling python with args:', args)
   var py    = spawn('python', args);
@@ -36,7 +35,9 @@ function runPy(){
     console.log('stderr: ' + data);
   });
 
-  py.on('close', function (code) {
+  py.on('close', function (code)
     console.log('child process exited with code ' + code);
+    console.log('running db import now')
+    tvToDB()
   });
 }
