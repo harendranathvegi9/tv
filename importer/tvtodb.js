@@ -22,7 +22,7 @@ function saveCSV(name){
   console.log('saving')
   var time = name.split('--')[1]*1000
   var idata = []
-  fs.createReadStream('./snapshots/'+name).pipe(parser)
+  fs.createReadStream('../snapshots/'+name).pipe(parser)
     .on('data', function(line) {
       var metrics = {
         ticker: line.Ticker,

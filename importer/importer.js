@@ -23,7 +23,7 @@ function runPy(){
   console.log('Running', cront);
   var args = ['./trending-value/trendingvalue.py']
   if(argv.dev) args.push('--dev')
-  args.push('--output=../../snapshots')
+  args.push('--output=../snapshots')
 
   console.log('calling python with args:', args)
   var py    = spawn('python', args);
