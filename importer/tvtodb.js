@@ -1,4 +1,4 @@
-var db = require('./db/db.js')
+var db = require('./db.js')
 var peek = require('level-peek')
 var fs = require('fs')
 var _ = require('lodash')

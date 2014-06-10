@@ -1,7 +1,7 @@
 var CJ = require('cron').CronJob
 var argv = require('yargs').argv
 
-var tvToDB = require('tvtodb.js')
+var tvToDB = require('./tvtodb.js')
 var spawn = require('child_process').spawn
 
 var interval = argv.interval || 'day'
