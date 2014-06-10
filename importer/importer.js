@@ -36,7 +36,7 @@ function runPy(){
     console.log('stderr: ' + data);
   });
 
-  py.on('close', function (code)
+  py.on('close', function (code){
     console.log('child process exited with code ' + code);
     console.log('running db import now')
     tvToDB()
