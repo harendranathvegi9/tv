@@ -2,7 +2,7 @@ var router = require('./router.js')
 
 router.router.define('/', function () {
  console.log('home')
-  $.get('http://localhost:5000/', function(data){
+  $.get('http://http://54.200.210.170:5000/', function(data){
     var data = JSON.parse(data)
     console.log(data.snapshots)
     console.log(JSON.stringify(data, null, 2))
@@ -15,7 +15,7 @@ router.router.define('/snapshot/:id', function (match) {
  console.log('home')
  console.log('match', match)
  var id = match.params.id
- $.get('http://localhost:5000/snapshot/'+id, function(data){
+ $.get('http://http://54.200.210.170:5000/snapshot/'+id, function(data){
    var data = JSON.parse(data)
    console.log('data', data.data)
    console.log('headers', data.headers)
