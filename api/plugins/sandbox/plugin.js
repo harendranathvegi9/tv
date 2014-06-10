@@ -32,9 +32,8 @@ function snapshot (request, reply){
       return {title: header}
     })
     _.each(results, function(row){
-      var d = _.map(row.value, function(r){
-        return [r.ticker].concat(r.ranks).concat(r.raw)
-      })
+      var r = row.value
+      var d = [r.ticker].concat(_.values(r.ranks)).concat(_.values(r.raw))
       data.data.push(d)
     })
     console.log(data)
