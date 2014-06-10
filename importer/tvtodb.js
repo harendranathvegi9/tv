@@ -127,7 +127,10 @@ function saveRank(idata, time){
     })
   })
   db.put('imports~'+time, time, function(err){
-    if(err) throw err
+    if(err) {
+      console.log('error:', time)
+      throw err
+    }
   })
 }
 
