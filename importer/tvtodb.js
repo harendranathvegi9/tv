@@ -128,6 +128,7 @@ function saveRank(idata, time){
     })
   })
   db.put('imports~'+time, time, function(err){
+    console.log('SAVED')
     if(err) {
       console.log('error:', time)
       throw err
