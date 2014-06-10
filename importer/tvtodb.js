@@ -7,7 +7,7 @@ var binaryCSV = require('binary-csv')
 var parser = binaryCSV({json: true})
 
 module.exports = function(){
-  fs.readdir('./snapshots', function(err, files){
+  fs.readdir('../snapshots', function(err, files){
     files.map(function(name){
       var parts = name.split('.')
       if(parts.length < 2 || parts[1] != 'csv'){
