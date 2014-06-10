@@ -19,8 +19,9 @@ module.exports = function(){
 }
 
 function saveCSV(name){
-  console.log('saving')
+  console.log('saving', name)
   var time = name.split('--')[1]*1000
+  console.log('time is', time)
   var idata = []
   fs.createReadStream('../snapshots/'+name).pipe(parser)
     .on('data', function(line) {
