@@ -33,8 +33,7 @@ function snapshot (request, reply){
     })
     _.each(results, function(row){
       var r = row.value
-      var d = 
-        return [r.ticker].concat(r.ranks).concat(r.raw)
+      var d = [r.ticker].concat(_.values(r.ranks)).concat(_.values(r.raw))
       data.data.push(d)
     })
     console.log(data)
