@@ -36,7 +36,6 @@ function snapshot (request, reply){
       var d = [r.ticker].concat(_.values(r.ranks)).concat(_.values(r.raw))
       data.data.push(d)
     })
-    console.log(data)
     reply(JSON.stringify(data))
   })
 }

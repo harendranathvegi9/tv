@@ -1,13 +1,24 @@
+var _ = require('lodash')
+var moment = require('moment')
+
 var router = require('./router.js')
 var host = 'http://'+location.hostname
 
 router.router.define('/', function () {
- console.log('home')
+ console.log('home232423')
   $.get(host+':5000/', function(data){
     var data = JSON.parse(data)
-    console.log(data.snapshots)
-    console.log(JSON.stringify(data, null, 2))
-    $('#main').html('<pre>'+JSON.stringify(data, null, 2)+'</pre>')
+    var snapshotIds = _.pluck(data.snapshots, 'value')
+    var $html = $('<div id="snapshots">')
+    _.each(snapshotIds, function(id){
+      var date = moment(id).format("MMMM Do YYYY, hh:mm:ss")
+      var linkCSV = $('<a>').attr('href', 'snapshot/'+id+'/csv').text('CSV')
+      var linkWeb = $('<a>').attr('href', 'snapshot/'+id).text('Table')
+      var $line = $('<div>').append(date).append(linkCSV).append(linkWeb)
+
+      $html.append($line)
+    })
+    $('#main').append($html)
   })
  this.next()
 })

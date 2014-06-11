@@ -19,6 +19,14 @@ router.addRoute('/app/*', function(req, res){
   send(req, __dirname+url.parse(req.url).pathname).pipe(res);
 })
 
+router.addRoute('/snapshot/:id/csv', function(req, res){
+  var id = req.route.params.id
+  console.log('SNAPSHOT CSV', '/snapshots/output/ranked--'+id+'.csv')
+
+  res.setHeader('Content-disposition', 'attachment; filename=ranked--'+id+'.csv');
+  send(req, 'ranked--'+id+'.csv', {root: __dirname+'/../snapshots/output/'}).pipe(res);
+})
+
 router.addRoute('/*', function(req, res){
   console.log('html', url.parse(req.url).pathname)
   send(req, __dirname+'/index.html').pipe(res);
