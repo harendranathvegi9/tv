@@ -6,6 +6,8 @@ var _ = require('lodash')
 var binaryCSV = require('binary-csv')
 var parser = binaryCSV({json: true})
 
+var csvWriter = require('csv-write-stream')
+
 module.exports = function(){
   fs.readdir('../snapshots', function(err, files){
     files.map(function(name){
@@ -122,11 +124,22 @@ function rank(idata){
 
 function saveRank(idata, time){
   var ranks = rank(idata)
+
+  var writer = csvWriter()
+  writer.pipe(fs.createWriteStream('../snapshots/output/ranked--'+time+'.csv'))
+
   _.each(ranks, function(line, index){
+    var a = {ticker: line.ticker}
+    _.each(line.ranks, function(rank, key){a['rank-'+key] = rank})
+    _.each(line.raw, function(rank, key){a['raw-'+key] = rank})
+    writer.write(a)
+
     db.put('data~'+time+'~'+line.ticker, line, function(err){
       if(err) throw err
     })
   })
+  writer.end()
+
   db.put('imports~'+time, time, function(err){
     console.log('SAVED, run complete')
     if(err) {

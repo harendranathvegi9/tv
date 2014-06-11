@@ -1,9 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var router = require('./router.js')
+var host = 'http://'+location.hostname
 
 router.router.define('/', function () {
  console.log('home')
-  $.get('http://http://54.200.210.170:5000/', function(data){
+  $.get(host+':5000/', function(data){
     var data = JSON.parse(data)
     console.log(data.snapshots)
     console.log(JSON.stringify(data, null, 2))
@@ -16,7 +17,7 @@ router.router.define('/snapshot/:id', function (match) {
  console.log('home')
  console.log('match', match)
  var id = match.params.id
- $.get('http://http://54.200.210.170:5000/snapshot/'+id, function(data){
+ $.get(host+':5000/snapshot/'+id, function(data){
    var data = JSON.parse(data)
    console.log('data', data.data)
    console.log('headers', data.headers)
