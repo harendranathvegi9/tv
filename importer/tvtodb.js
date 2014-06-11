@@ -1,7 +1,8 @@
 var db = require('./db.js')
-var peek = require('level-peek')
 var fs = require('fs')
 var _ = require('lodash')
+
+var ranker = require('rankjs')
 
 var binaryCSV = require('binary-csv')
 var parser = binaryCSV({json: true})
@@ -49,31 +50,6 @@ function saveCSV(name){
     })
 }
 
-module.exports.read = function(){
-  peek.last(db, {end: 'imports~~'}, function(err, key, value){
-    // db.createReadStream({start: 'data~'+value+'~', end: 'data~'+value+'~~'})
-    //   .on('data', function (data) {
-    //     console.log(data)
-    //   })
-    //   .on('error', function (err) {
-    //     console.log('Oh my!', err)
-    //   })
-    //   .on('close', function () {
-    //     console.log('Stream closed')
-    //   })
-    //   .on('end', function () {
-    //     console.log('Stream closed')
-    //   })
-    db.get('data~'+value+'~CXDC', function(err, data){
-      console.log('CXDC', err, data)
-    })
-    db.get('data~'+value+'~REX', function(err, data){
-      console.log('REX', err, data)
-    })
-  })
-
-}
-
 function rank(idata){
   var length = idata.length - 1
   var ranks = {}
@@ -102,6 +78,13 @@ function rank(idata){
       ranks[value.ticker].ranks[indi] = 100*((index/length))
       ranks[value.ticker].raw[indi] = value[indi]
     })
+    //@TODO implement tied ranking
+    // var tiedrank = ranker.fractional(idata, indi)
+    // _.each(tiedrank, function(row){
+    //   ranks[row.ticker] = ranks[row.ticker] || {ranks:{}, raw:{}}
+    //   ranks[row.ticker].ranks[indi] = 100*(row.rank/length)
+    //   ranks[row.ticker].raw[indi] = row[indi]
+    // })
   })
   var rankarr = []
   _.each(ranks, function(values, ticker){
@@ -109,7 +92,6 @@ function rank(idata){
     var sumrank = _.reduce(sixranks, function(sum, num) {
       return sum + num
     })
-    // console.log('sr', sumrank)
     rankarr.push({ticker: ticker, rank: sumrank})
     ranks[ticker].ranks.rank = sumrank
   })
@@ -128,17 +110,24 @@ function saveRank(idata, time){
   var writer = csvWriter()
   writer.pipe(fs.createWriteStream('../snapshots/output/ranked--'+time+'.csv'))
 
+  var ws = db.createWriteStream()
+  ws.on('error', function (err) {
+    console.log('WS error', err)
+  })
+  ws.on('close', function () {
+    console.log('WS Closed')
+  })
+
   _.each(ranks, function(line, index){
     var a = {ticker: line.ticker}
     _.each(line.ranks, function(rank, key){a['rank-'+key] = rank})
     _.each(line.raw, function(rank, key){a['raw-'+key] = rank})
     writer.write(a)
 
-    db.put('data~'+time+'~'+line.ticker, line, function(err){
-      if(err) throw err
-    })
+    ws.write({ key: 'data~'+time+'~'+line.ticker, value: line })
   })
   writer.end()
+  ws.end()
 
   db.put('imports~'+time, time, function(err){
     console.log('SAVED, run complete')
