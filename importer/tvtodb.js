@@ -41,8 +41,8 @@ function saveCSV(name){
       idata.push(metrics)
     })
     .on('end', function(){
-      console.log('ENDED')
-      //fs.renameSync('./snapshots/'+name, './snapshots/processed/'+name)
+      console.log('ENDED, renaming now', name)
+      fs.renameSync('../snapshots/'+name, '../snapshots/processed/'+name)
       saveRank(idata, time)
     })
 }
@@ -128,7 +128,7 @@ function saveRank(idata, time){
     })
   })
   db.put('imports~'+time, time, function(err){
-    console.log('SAVED')
+    console.log('SAVED, run complete')
     if(err) {
       console.log('error:', time)
       throw err
