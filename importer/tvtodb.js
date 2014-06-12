@@ -45,7 +45,7 @@ function saveCSV(name){
     })
     .on('end', function(){
       console.log('ENDED, renaming now', name)
-      // fs.renameSync('../snapshots/'+name, '../snapshots/processed/'+name)
+      fs.renameSync('../snapshots/'+name, '../snapshots/processed/'+name)
       saveRank(idata, time)
     })
 }
@@ -72,13 +72,6 @@ function rank(idata){
     if(isNaN(row.MOM)) row.MOM = 0
   })
   _.each(by, function(dir, indi){
-    // var sorted = idata.sort(sortProp(indi, dir))
-    // sorted.forEach(function(value, index){
-    //   ranks[value.ticker] = ranks[value.ticker] || {ranks:{}, raw:{}}
-    //   ranks[value.ticker].ranks[indi] = 100*((index/length))
-    //   ranks[value.ticker].raw[indi] = value[indi]
-    // })
-    // @TODO implement tied ranking
     var tiedrank = ranker(idata, indi, dir).tiedRank().normalize().value('merged')
     _.each(tiedrank, function(row){
       ranks[row.ticker] = ranks[row.ticker] || {ranks:{}, raw:{}}
