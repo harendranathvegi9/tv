@@ -2,7 +2,7 @@ var db = require('./db.js')
 var fs = require('fs')
 var _ = require('lodash')
 
-var ranker = require('rankjs')
+var ranker = require('rankarray')
 
 var binaryCSV = require('binary-csv')
 var parser = binaryCSV({json: true})
@@ -45,7 +45,7 @@ function saveCSV(name){
     })
     .on('end', function(){
       console.log('ENDED, renaming now', name)
-      fs.renameSync('../snapshots/'+name, '../snapshots/processed/'+name)
+      // fs.renameSync('../snapshots/'+name, '../snapshots/processed/'+name)
       saveRank(idata, time)
     })
 }
@@ -72,19 +72,19 @@ function rank(idata){
     if(isNaN(row.MOM)) row.MOM = 0
   })
   _.each(by, function(dir, indi){
-    var sorted = idata.sort(sortProp(indi, dir))
-    sorted.forEach(function(value, index){
-      ranks[value.ticker] = ranks[value.ticker] || {ranks:{}, raw:{}}
-      ranks[value.ticker].ranks[indi] = 100*((index/length))
-      ranks[value.ticker].raw[indi] = value[indi]
-    })
-    //@TODO implement tied ranking
-    // var tiedrank = ranker.fractional(idata, indi)
-    // _.each(tiedrank, function(row){
-    //   ranks[row.ticker] = ranks[row.ticker] || {ranks:{}, raw:{}}
-    //   ranks[row.ticker].ranks[indi] = 100*(row.rank/length)
-    //   ranks[row.ticker].raw[indi] = row[indi]
+    // var sorted = idata.sort(sortProp(indi, dir))
+    // sorted.forEach(function(value, index){
+    //   ranks[value.ticker] = ranks[value.ticker] || {ranks:{}, raw:{}}
+    //   ranks[value.ticker].ranks[indi] = 100*((index/length))
+    //   ranks[value.ticker].raw[indi] = value[indi]
     // })
+    // @TODO implement tied ranking
+    var tiedrank = ranker(idata, indi, dir).tiedRank().normalize().value('merged')
+    _.each(tiedrank, function(row){
+      ranks[row.ticker] = ranks[row.ticker] || {ranks:{}, raw:{}}
+      ranks[row.ticker].ranks[indi] = 100*row.rank
+      ranks[row.ticker].raw[indi] = row[indi]
+    })
   })
   var rankarr = []
   _.each(ranks, function(values, ticker){
