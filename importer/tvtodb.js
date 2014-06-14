@@ -2,7 +2,7 @@ var db = require('./db.js')
 var fs = require('fs')
 var _ = require('lodash')
 
-var ranker = require('rankarray')
+var ranker = require('datarank')
 
 var binaryCSV = require('binary-csv')
 
