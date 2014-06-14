@@ -2,10 +2,10 @@ var _ = require('lodash')
 var moment = require('moment')
 
 var router = require('./router.js')
+
 var host = 'http://'+location.hostname
 
-router.router.define('/', function () {
- console.log('home232423')
+router.router.define('/', function (match) {
   $.get(host+':5000/', function(data){
     var data = JSON.parse(data)
     var snapshotIds = _.pluck(data.snapshots, 'value')
@@ -24,60 +24,7 @@ router.router.define('/', function () {
  this.next(match)
 })
 
-router.router.define('/snapshot/:id', function (match) {
-  if(match.perfect){
-    var id = match.params.id
-    $.get(host+':5000/snapshot/'+id, function(data){
-      var data = JSON.parse(data)
-      $('#main').html('<table id="table">')
-      $('#table').dataTable( {
-          "pageLength": 10000,
-          "bPaginate": false,
-          "data": data.data,
-          "columns": data.headers
-      } );
-    })
-  }
-  this.next(match)
-})
-
-router.router.define('/snapshot/:id/momentum/:percent?', function (match) {
-  if(match.perfect){
-
-   var percent = match.params.percent ? parseFloat(match.params.percent)/100 : .1
-   var id = match.params.id
-
-   $.get(host+':5000/snapshot/'+id, function(data){
-     var data = JSON.parse(data)
-     var rows = data.data.sort(sortKey(8, -1))
-     var cut = parseInt(rows.length*percent)
-     console.log(rows.length, cut)
-     rows = rows.splice(0, cut)
-     console.log(rows)
-
-
-     $('#main').html('<table id="table">')
-     var table = $('#table').dataTable( {
-          "pageLength": 10000,
-          "bPaginate": false,
-          "data": rows,
-          "columns": data.headers
-      } ).api()
-      table.order(7, 'desc').draw()
-   })
- }
- this.next(match)
-})
-
-function sortKey(key, modifier){
-  return function(a, b){
-    var res = 0
-    modifier = modifier || 1
-    if(a[key] < b[key]) res = -1
-    if(a[key] > b[key]) res = 1
-    return res*modifier
-  }
-}
+require('./snapshots.js')
 
 $(document).ready(function(){
   bootstrap()
