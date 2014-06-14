@@ -52,7 +52,7 @@ router.router.define('/snapshot/:id/momentum/:percent?', function (match) {
      var rows = data.data.sort(sortKey(8, -1))
      var cut = parseInt(rows.length*percent)
      console.log(rows.length, cut)
-     rows.splice(cut)
+     rows = rows.splice(0, cut)
      console.log(rows)
 
 
