@@ -26,14 +26,16 @@ function snapshot (request, reply){
   var id = request.route.params.id
   getStreamArray(db, {start: 'data~'+id+'~', end: 'data~'+id+'~~'}, function(results){
     var data = {data: [], headers:{}}
-    var headers = Object.keys(results[0].value.ranks).concat(Object.keys(results[0].value.raw))
+    var headers = _.map(Object.keys(results[0].value.ranks), function(value){return value + ' rank'}).concat(Object.keys(results[0].value.raw))
     headers.unshift('Ticker')
     data.headers = _.map(headers, function(header){
       return {title: header}
     })
     _.each(results, function(row){
       var r = row.value
-      var d = [r.ticker].concat(_.values(r.ranks)).concat(_.values(r.raw))
+      var ranks = _.map(_.values(r.ranks), function(item){return Math.round(item*100)/100})
+      var raw = _.map(_.values(r.raw), function(item){return Math.round(item*100)/100})
+      var d = [r.ticker].concat(ranks).concat(raw)
       data.data.push(d)
     })
     reply(JSON.stringify(data))
