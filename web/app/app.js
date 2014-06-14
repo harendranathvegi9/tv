@@ -63,7 +63,7 @@ router.router.define('/snapshot/:id/momentum/:percent?', function (match) {
           "data": rows,
           "columns": data.headers
       } ).api()
-      table.order(8, 'desc').draw()
+      table.order(7, 'desc').draw()
    })
  }
  this.next(match)
