@@ -15731,8 +15731,9 @@ var Cache = require('./datacache.js')
 var host = 'http://'+location.hostname
 
 
-router.router.define('/snapshot/:id', function (match) {
+router.router.define('/snapshot/:id/', function (match) {
   if(match.perfect){
+    console.log('snapshot is perfect')
 
     var id = match.params.id
     getSnapshot(id, function(err, data){
@@ -15750,8 +15751,9 @@ router.router.define('/snapshot/:id', function (match) {
 })
 
 router.router.define('/snapshot/:id/momentum/:percent?', function (match) {
+  console.log('in mom route')
   if(match.perfect){
-
+    console.log('its perfect')
     var percent = match.params.percent ? parseFloat(match.params.percent)/100 : .1
     var id = match.params.id
 
@@ -15777,6 +15779,7 @@ router.router.define('/snapshot/:id/momentum/:percent?', function (match) {
 })
 
 function getSnapshot(id, cb){
+  console.log('calling get snapshot fn')
   Cache.getSnapshot(id, function(err, data){
     if(!data){
       console.log('QUERYING API')
