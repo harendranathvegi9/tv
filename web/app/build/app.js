@@ -14,7 +14,7 @@ router.router.define('/', function (match) {
     _.each(snapshotIds, function(id){
       var date = moment(id).format("MMMM Do YYYY, hh:mm:ss")
       var linkCSV = $('<a>').addClass('button').attr('href', 'snapshot/'+id+'/csv').text('CSV')
-      var linkWeb = $('<a>').addClass('button').attr('href', 'snapshot/'+id).text('Table')
+      var linkWeb = $('<a>').addClass('button').attr('href', 'snapshot/'+id+'/all').text('Table')
       var linkMom = $('<a>').addClass('button').attr('href', 'snapshot/'+id+'/momentum').text('Momentum')
       var $line = $('<div>').append(date).append(linkCSV).append(linkWeb).append(linkMom)
 
@@ -25,8 +25,6 @@ router.router.define('/', function (match) {
  this.next(match)
 })
 
-require('./snapshots.js')
-
 $(document).ready(function(){
   bootstrap()
 })
@@ -35,7 +33,7 @@ function bootstrap(){
   router.goto(window.location.pathname)
 }
 
-},{"./router.js":53,"./snapshots.js":54,"lodash":49,"moment":52}],2:[function(require,module,exports){
+},{"./router.js":53,"lodash":49,"moment":52}],2:[function(require,module,exports){
 var level = require('level-browserify')
 
 var db = level('./snapshots', {valueEncoding: 'json'})
@@ -15721,17 +15719,18 @@ Router.router = router
 
 module.exports = Router
 
+require('./snapshots.js')
+
 function fourofour(){
   $('#main').html('404!')
 }
 
-},{"mapleTree":51}],54:[function(require,module,exports){
+},{"./snapshots.js":54,"mapleTree":51}],54:[function(require,module,exports){
 var router = require('./router.js')
 var Cache = require('./datacache.js')
 var host = 'http://'+location.hostname
 
-
-router.router.define('/snapshot/:id/', function (match) {
+router.router.define('/snapshot/:id/all', function (match) {
   if(match.perfect){
     console.log('snapshot is perfect')
 

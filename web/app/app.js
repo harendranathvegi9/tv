@@ -13,7 +13,7 @@ router.router.define('/', function (match) {
     _.each(snapshotIds, function(id){
       var date = moment(id).format("MMMM Do YYYY, hh:mm:ss")
       var linkCSV = $('<a>').addClass('button').attr('href', 'snapshot/'+id+'/csv').text('CSV')
-      var linkWeb = $('<a>').addClass('button').attr('href', 'snapshot/'+id).text('Table')
+      var linkWeb = $('<a>').addClass('button').attr('href', 'snapshot/'+id+'/all').text('Table')
       var linkMom = $('<a>').addClass('button').attr('href', 'snapshot/'+id+'/momentum').text('Momentum')
       var $line = $('<div>').append(date).append(linkCSV).append(linkWeb).append(linkMom)
 
@@ -23,8 +23,6 @@ router.router.define('/', function (match) {
   })
  this.next(match)
 })
-
-require('./snapshots.js')
 
 $(document).ready(function(){
   bootstrap()

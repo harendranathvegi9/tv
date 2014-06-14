@@ -30,6 +30,8 @@ Router.router = router
 
 module.exports = Router
 
+require('./snapshots.js')
+
 function fourofour(){
   $('#main').html('404!')
 }

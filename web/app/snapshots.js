@@ -2,8 +2,7 @@ var router = require('./router.js')
 var Cache = require('./datacache.js')
 var host = 'http://'+location.hostname
 
-
-router.router.define('/snapshot/:id/', function (match) {
+router.router.define('/snapshot/:id/all', function (match) {
   if(match.perfect){
     console.log('snapshot is perfect')
 
