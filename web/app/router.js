@@ -13,7 +13,10 @@ var Router = {}
 Router.goto = function(uri){
   history.pushState(null, '', uri)
   var match = router.match(uri)
-  if(typeof match.fn != 'undefined') match.fn(match)
+  if(typeof match.fn != 'undefined'){
+    console.log('matcha', match)
+    match.fn(match)
+  }
   else fourofour()
 }
 
