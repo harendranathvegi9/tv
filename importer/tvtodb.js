@@ -5,7 +5,6 @@ var _ = require('lodash')
 var ranker = require('rankarray')
 
 var binaryCSV = require('binary-csv')
-var parser = binaryCSV({json: true})
 
 var csvWriter = require('csv-write-stream')
 
@@ -24,6 +23,8 @@ module.exports = function(){
 function saveCSV(name){
   console.log('saving', name)
   var time = name.split('--')[1]*1000
+  var parser = binaryCSV({json: true})
+
   console.log('time is', time)
   var idata = []
   fs.createReadStream('../snapshots/'+name).pipe(parser)
@@ -119,6 +120,7 @@ function saveRank(idata, time){
 
     ws.write({ key: 'data~'+time+'~'+line.ticker, value: line })
   })
+
   writer.end()
   ws.end()
 
@@ -140,8 +142,3 @@ function sortProp(prop, modifier){
     return res*modifier
   }
 }
-
-_.reduce({a:1, b:2}, function(sum, num) {
-  console.log('sm', sum, num)
-  return sum + num
-}, 0)
